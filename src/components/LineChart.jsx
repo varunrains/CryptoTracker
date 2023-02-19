@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 
 import { Line } from "react-chartjs-2";
 import { Col, Row, Typography } from "antd";
-import millify from "millify";
+
 
 const { Title } = Typography;
 
@@ -13,7 +13,7 @@ const LineChart = ({ coinHistory, currentPrice, coinName, inr }) => {
   for (let i = 0; i < coinHistory?.data?.history?.length; i++) {
     coinPrice.push(coinHistory.data.history[i].price * inr);
     coinTimeStamp.push(
-      new Date(coinHistory.data.history[i].timestamp).toLocaleDateString()
+      new Date(coinHistory.data.history[i].timestamp *1000).toLocaleDateString()
     );
   }
 
@@ -53,7 +53,7 @@ const LineChart = ({ coinHistory, currentPrice, coinName, inr }) => {
             {coinHistory?.data?.change} %
           </Title>
           <Title level={5} className="current-price">
-            Current {coinName} Price: Rs {millify(currentPrice)}
+            Current {coinName} Price: Rs {currentPrice}
           </Title>
         </Col>
       </Row>

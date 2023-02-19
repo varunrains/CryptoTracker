@@ -27,7 +27,7 @@ const { Option } = Select;
 const CryptoDetails = () => {
   const { coinId, inrValue } = useParams();
   let inr = inrValue;
-  const [timePeriod, setTimePeriod] = useState("7d");
+  const [timePeriod, setTimePeriod] = useState("");
   const { data, isFetching } = useGetCryptoDetailsQuery(coinId);
   const { data: coinHistory, isFetching: isCoinHistoryFetching } =
     useGetCryptoHistoryQuery({
@@ -37,6 +37,7 @@ const CryptoDetails = () => {
   if (isFetching || isCoinHistoryFetching) return <Loader />;
 
   const cryptoDetails = data?.data?.coin;
+  
   const time = ["3h", "24h", "7d", "30d", "1y", "3m", "3y", "5y"];
 
   const stats = [
@@ -48,7 +49,7 @@ const CryptoDetails = () => {
     { title: "Rank", value: cryptoDetails.rank, icon: <NumberOutlined /> },
     {
       title: "24h Volume",
-      value: `$ ${cryptoDetails.volume && millify(cryptoDetails.volume)}`,
+      value: `$ ${cryptoDetails?.volume && millify(cryptoDetails?.volume)}`,
       icon: <ThunderboltOutlined />,
     },
     {
@@ -76,7 +77,7 @@ const CryptoDetails = () => {
     },
     {
       title: "Aprroved Supply",
-      value: cryptoDetails.approvedSupply ? (
+      value: cryptoDetails?.supply?.total ? (
         <CheckOutlined />
       ) : (
         <StopOutlined />
@@ -85,12 +86,12 @@ const CryptoDetails = () => {
     },
     {
       title: "Total Supply",
-      value: `$ ${millify(cryptoDetails.totalSupply)}`,
+      value: `$ ${millify(cryptoDetails?.supply?.total)}`,
       icon: <ExclamationCircleOutlined />,
     },
     {
       title: "Circulating Supply",
-      value: `$ ${millify(cryptoDetails.circulatingSupply)}`,
+      value: `$ ${millify(cryptoDetails?.supply?.circulating)}`,
       icon: <ExclamationCircleOutlined />,
     },
   ];
@@ -99,7 +100,7 @@ const CryptoDetails = () => {
     <Col className="coin-detail-container">
       <Col className="coin-heading-container">
         <Title level={2} className="coin-name">
-          {cryptoDetails.name} ({cryptoDetails.slug}) Price
+          {cryptoDetails.name} ({cryptoDetails.symbol}) Price
         </Title>
         <p>
           {cryptoDetails.name} live price in INR. View value statistics, market
